@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: dev
+  config:
+    import: optional:file:.env[.properties]
+
+  jpa:
+    open-in-view: false
+
+server:
+  port: 8081
