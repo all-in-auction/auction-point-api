@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'com.google.protobuf' version '0.9.3' // protobuf 플러그인 추가
 }
 
 group = 'com'
@@ -45,14 +46,48 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-	// json 역직렬화
+	// JSON 역직렬화
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
-	// open feign
+	// OpenFeign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	// gRPC 관련 의존성 추가
+	implementation 'io.grpc:grpc-netty:1.56.0'
+	implementation 'io.grpc:grpc-protobuf:1.56.0'
+	implementation 'io.grpc:grpc-stub:1.56.0'
+	compileOnly 'javax.annotation:javax.annotation-api:1.3.2' // javax.annotation 지원
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// Protobuf 설정
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.23.4" // Protobuf 컴파일러
+	}
+	plugins {
+		grpc {
+			artifact = "io.grpc:protoc-gen-grpc-java:1.56.0" // gRPC 플러그인
+		}
+	}
+	generateProtoTasks {
+		all().each { task ->
+			task.plugins {
+				grpc {}
+			}
+		}
+	}
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs += 'build/generated/source/proto/main/grpc'
+			srcDirs += 'build/generated/source/proto/main/java'
+		}
+	}
 }

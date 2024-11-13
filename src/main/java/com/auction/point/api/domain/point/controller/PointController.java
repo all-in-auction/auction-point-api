@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.UUID;
 
-@Controller
+//@Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api")

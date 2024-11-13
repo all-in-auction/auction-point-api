@@ -70,7 +70,7 @@ public class PointService {
 
     @Transactional
     public void createPoint(long userId) {
-        Point point = Point.of(0, userId);
+        Point point = new Point(0, userId);
         pointRepository.save(point);
     }
 
