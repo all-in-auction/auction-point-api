@@ -60,3 +60,11 @@ message PointDto {
   int64 user_id = 2; // 사용자 ID
   int32 point_amount = 3; // 포인트 금액
 }
+
+enum PaymentType {
+  CHARGE = 0;   // 충전
+  SPEND = 1;    // 사용
+  RECEIVE = 2;  // 지급
+  TRANSFER = 3; // 전환
+  REFUND = 4;   // 환불
+}
