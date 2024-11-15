@@ -17,3 +17,14 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+  port: 8081
+
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.orm: TRACE
+    org.springframework.transaction: TRACE
+    com.zaxxer.hikari: TRACE
+    com.mysql.cj.jdbc: TRACE
