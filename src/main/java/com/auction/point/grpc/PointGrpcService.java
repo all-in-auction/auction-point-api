@@ -22,7 +22,7 @@ public class PointGrpcService extends PointServiceGrpc.PointServiceImplBase {
             Point.CreatePointRequest request,
             StreamObserver<Point.CreatePointResponse> responseObserver)
     {
-        try {
+
             long userId = request.getUserId();
             pointService.createPoint(userId);
             log.info("SUCCESS");
@@ -32,9 +32,5 @@ public class PointGrpcService extends PointServiceGrpc.PointServiceImplBase {
 
             responseObserver.onNext(response);
             responseObserver.onCompleted();
-
-        } catch (Exception e) {
-            responseObserver.onError(e);
-        }
     }
 }
