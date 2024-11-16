@@ -17,3 +17,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://${EUREKA_HOST}:8761/eureka
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  security:
+    enabled: false
