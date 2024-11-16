@@ -63,7 +63,7 @@ public class PointService {
 
         // coupon 사용 저장
         if (payment.getCouponUserId() != null) {
-            couponService.useCoupon(userId, CouponUseRequestDto.from(payment, pointHistory));
+            couponService.useCoupon(userId, payment.getCouponUserId(), CouponUseRequestDto.from(pointHistory));
         }
 
         return new ChargeResponseDto(payment.getPaymentAmount(), payment.getPointAmount(), point.getPointAmount());

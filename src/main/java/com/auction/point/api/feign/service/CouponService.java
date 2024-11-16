@@ -18,15 +18,16 @@ import static com.auction.point.api.common.constants.Const.USER_ID;
         configuration = FeignConfig.class
 )
 public interface CouponService {
-    @GetMapping("/v4/coupon/{couponUserId}")
+    @GetMapping("/v4/coupons/{couponUserId}")
     ApiResponse<CouponGetResponseDto> getValidCoupon(
             @RequestHeader(USER_ID) long userId,
             @PathVariable("couponUserId") Long couponUserId
     );
 
-    @PostMapping("/v4/coupon")
+    @PostMapping("/v4/coupons/{couponUserId}")
     ApiResponse<Void> useCoupon(
             @RequestHeader(USER_ID) long userId,
+            @PathVariable("couponUserId") Long couponUserId,
             CouponUseRequestDto couponUseRequestDto
     );
 }
