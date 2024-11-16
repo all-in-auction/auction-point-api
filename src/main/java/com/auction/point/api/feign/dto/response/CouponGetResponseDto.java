@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class CouponGetResponseDto {
-    private long couponId;
+    private long couponUserId;
     private int discountRate;
 }
