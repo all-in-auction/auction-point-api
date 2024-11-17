@@ -9,9 +9,16 @@ spring:
   jpa:
     open-in-view: false
 
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
 server:
 #  port: 8081
   port: 0   # 랜덤 포트
+  http2:
+    enabled: true
 
 eureka:
   client:
