@@ -15,8 +15,10 @@ eureka:
       defaultZone: http://${EUREKA_HOST}:8761/eureka
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health
   endpoint:
     health:
       show-details: always
-  security:
-    enabled: false
