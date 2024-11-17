@@ -69,6 +69,9 @@ dependencies {
 
 	// logstash
 	implementation 'net.logstash.logback:logstash-logback-encoder:8.0'
+
+	// prometheus
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
