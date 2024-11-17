@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
 @Configuration
 @Slf4j
@@ -29,6 +30,8 @@ public class EcsConfig {
 
         config.setIpAddress(ip);
         config.setPreferIpAddress(true);
+        config.setAppname("points-service");
+        config.setInstanceId("points-service:" + UUID.randomUUID().toString());
 
         return config;
     }
