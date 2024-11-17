@@ -1,8 +1,8 @@
 package com.auction.point.api.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.context.annotation.Bean;
@@ -51,17 +51,12 @@ public class EcsConfig {
             reader.close();
 
             // JSON 파싱
-            JSONObject metadata = new JSONObject(response.toString());
-            JSONArray networks = metadata.getJSONArray("Networks");
-            if (networks.length() > 0) {
-                JSONObject network = networks.getJSONObject(0);
-                JSONArray ipv4Addresses = network.getJSONArray("IPv4Addresses");
-                if (ipv4Addresses.length() > 0) {
-                    return ipv4Addresses.getString(0); // 첫 번째 IP 주소 반환
-                }
-            }
-            log.info("No private IP address found in metadata.");
-            return null;
+
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode metadata = objectMapper.readTree(response.toString());
+
+            return metadata.get("Networks").get(0).get("IPv4Addresses").get(0).asText();
         } catch (Exception e) {
             log.info("Failed to fetch private IP from metadata", e);
             return null;
