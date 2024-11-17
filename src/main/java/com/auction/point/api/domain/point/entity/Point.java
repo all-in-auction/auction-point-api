@@ -8,16 +8,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "point")
 @NoArgsConstructor
+@Table(name = "point")
 public class Point extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "point_amount")
     private int pointAmount;
 
     @NotNull
+    @Column(name = "user_id")
     private long userId;
 
     public void addPoint(int amount) {
