@@ -4,6 +4,7 @@ import com.auction.point.api.common.apipayload.ApiResponse;
 import com.auction.point.api.domain.payment.dto.response.ChargeResponseDto;
 import com.auction.point.api.domain.payment.service.PaymentService;
 import com.auction.point.api.domain.point.dto.request.ConvertRequestDto;
+import com.auction.point.api.domain.point.dto.request.PointChangeRequestDto;
 import com.auction.point.api.domain.point.dto.response.ConvertResponseDto;
 import com.auction.point.api.domain.point.service.PointService;
 import com.auction.point.api.feign.dto.response.CouponGetResponseDto;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.UUID;
 
+import static com.auction.point.api.common.constants.Const.USER_ID;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -31,32 +34,57 @@ public class PointController {
     private final CouponService couponService;
 
     /**
+     * 유저 포인트 생성
+     *
+     * @param userId
+     */
+    @PostMapping("/internal/v4/points")
+    @ResponseBody
+    public ApiResponse<Void> createPoint(@RequestHeader(USER_ID) long userId) {
+        pointService.createPoint(userId);
+        return ApiResponse.ok(null);
+    }
+
+    /**
+     * 유저 포인트 변경 (경매 낙찰, 보증금 환불 등)
+     *
+     * @param userId
+     * @param pointChangeRequestDto
+     */
+    @PatchMapping("/internal/v4/points")
+    @ResponseBody
+    public ApiResponse<Void> changePoint(
+            @RequestHeader(USER_ID) long userId,
+            @RequestBody PointChangeRequestDto pointChangeRequestDto
+    ) {
+        pointService.changePoint(userId, pointChangeRequestDto);
+        return ApiResponse.ok(null);
+    }
+
+    /**
      * 포인트 충전
+     *
      * @param userId
      * @param amount
-     * @param couponId
+     * @param couponUserId
      * @param model
      * @return front page
      */
     @GetMapping("/v2/points/buy")
-    public String getPaymentPage(@RequestHeader("X-User-Agent") long userId,
+    public String getPaymentPage(@RequestHeader(USER_ID) long userId,
                                  @RequestParam int amount,
-                                 @RequestParam(required = false) Long couponId,
+                                 @RequestParam(required = false) Long couponUserId,
                                  Model model) {
 
         paymentService.validateAmount(amount);
 
         int paymentAmount = amount;
-        Long couponUserId = null;
 
-        if(couponId != null) {
-            ApiResponse<CouponGetResponseDto> response = couponService.getCoupon(userId, couponId);
-
-            // TODO(coupon) : 예외처리가 필요한지 아니면 coupon server에서 해결되는지 확인 필요
-
+        if (couponUserId != null) {
+            ApiResponse<CouponGetResponseDto> response = couponService.getValidCoupon(userId, couponUserId);
             CouponGetResponseDto couponGetResponseDto = response.getData();
+
             paymentAmount = amount * (100 - couponGetResponseDto.getDiscountRate()) / 100;
-            couponUserId = couponGetResponseDto.getCouponId();
         }
 
         String orderId = UUID.randomUUID().toString().substring(0, 10);
@@ -73,6 +101,7 @@ public class PointController {
     /**
      * 결제 승인
      * 프론트에서 호출
+     *
      * @param jsonBody
      * @return ChargeResponseDto
      * @throws IOException
@@ -87,13 +116,14 @@ public class PointController {
 
     /**
      * 포인트 현금 전환
+     *
      * @param userId
      * @param convertRequestDto
      * @return ConvertResponseDto
      */
     @PostMapping("/v1/points/to-cash")
     @ResponseBody
-    public ApiResponse<ConvertResponseDto> convertPoint(long userId,
+    public ApiResponse<ConvertResponseDto> convertPoint(@RequestHeader(USER_ID) long userId,
                                                         @RequestBody ConvertRequestDto convertRequestDto) {
         return ApiResponse.ok(pointService.convertPoint(userId, convertRequestDto));
     }

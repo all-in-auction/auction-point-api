@@ -15,4 +15,11 @@ public enum PaymentType {
     PaymentType(String description) {
         this.description = description;
     }
+
+    public static boolean isDecreasePoint(PaymentType paymentType) {
+        return switch (paymentType) {
+            case SPEND, TRANSFER -> true;
+            default -> false;
+        };
+    }
 }
