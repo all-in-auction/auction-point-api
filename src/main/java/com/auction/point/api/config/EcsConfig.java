@@ -31,7 +31,12 @@ public class EcsConfig {
         config.setIpAddress(ip);
         config.setPreferIpAddress(true);
         config.setAppname("points-service");
-        config.setInstanceId("points-service:" + UUID.randomUUID().toString());
+        String taskArn = System.getenv("ECS_CONTAINER_METADATA_URI_V4");
+        String instanceId = taskArn != null
+                ? String.format("points-service:%s:%s", ip, taskArn)
+                : String.format("points-service:%s", ip);
+
+        config.setInstanceId(instanceId);
 
         return config;
     }
