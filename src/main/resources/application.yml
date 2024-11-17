@@ -13,10 +13,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://${EUREKA_HOST}:8761/eureka
-  instance:
-    prefer-ip-address: true
-    ip-address: ${ECS_CONTAINER_METADATA_V4_PRIVATE_IP}
-    instance-id: ${spring.application.name}:${ECS_CONTAINER_METADATA_URI_V4}
 
 management:
   endpoints:
