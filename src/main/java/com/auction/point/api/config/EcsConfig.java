@@ -30,6 +30,7 @@ public class EcsConfig {
         String ip = getPrivateIp(taskArn);
         config.setIpAddress(ip);
         config.setInstanceId("points-service:"+ip);
+        config.setNonSecurePort(8080);
 
         return config;
     }
@@ -51,8 +52,6 @@ public class EcsConfig {
             reader.close();
 
             // JSON 파싱
-
-
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode metadata = objectMapper.readTree(response.toString());
 
