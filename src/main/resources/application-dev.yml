@@ -30,3 +30,4 @@ payment:
 server:
   error:
     include-message: always
+  port: 0

@@ -23,7 +23,7 @@ service PointService {
 message CreatePointHistoryRequest {
   int64 user_id = 1;
   int32 amount = 2;
-  string payment_type = 3;
+  PaymentType payment_type = 3;
 }
 
 message CreatePointHistoryResponse {
