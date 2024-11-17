@@ -9,16 +9,21 @@ spring:
   jpa:
     open-in-view: false
 
+
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.orm: TRACE
+    org.springframework.transaction: TRACE
+    com.zaxxer.hikari: TRACE
+    com.mysql.cj.jdbc: TRACE
+
   cloud:
     openfeign:
       okhttp:
         enabled: true
-
-server:
-#  port: 8081
-  port: 0   # 랜덤 포트
-  http2:
-    enabled: true
 
 eureka:
   client:

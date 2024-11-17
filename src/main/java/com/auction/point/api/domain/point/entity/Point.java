@@ -32,7 +32,7 @@ public class Point extends TimeStamped {
         this.pointAmount = amount;
     }
 
-    private Point(int pointAmount, long userId) {
+    public Point(int pointAmount, long userId) {
         this.pointAmount = pointAmount;
         this.userId = userId;
     }
