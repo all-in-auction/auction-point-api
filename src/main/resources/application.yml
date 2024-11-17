@@ -9,6 +9,11 @@ spring:
   jpa:
     open-in-view: false
 
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
 logging:
   level:
     ROOT: INFO
@@ -19,11 +24,6 @@ logging:
     com.zaxxer.hikari: TRACE
     com.mysql.cj.jdbc: TRACE
 
-  cloud:
-    openfeign:
-      okhttp:
-        enabled: true
-
 eureka:
   client:
     service-url:
@@ -33,11 +33,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: "prometheus,health"
   endpoint:
     health:
       show-details: always
-      
-  security:
-    enabled: false
-
