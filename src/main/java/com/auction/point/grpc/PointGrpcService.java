@@ -78,4 +78,22 @@ public class PointGrpcService extends PointServiceGrpc.PointServiceImplBase {
         }
     }
 
+    @Override
+    public void increasePoint(Point.IncreasePointRequest request, StreamObserver<Point.IncreasePointResponse> responseObserver) {
+        try {
+            long userId = request.getUserId();
+            int price = request.getAmount();
+
+            pointService.increasePoint(userId, price);
+
+            Point.IncreasePointResponse response = Point.IncreasePointResponse.newBuilder()
+                    .setStatus("SUCCESS")
+                    .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        } catch (Exception e) {
+            log.error("Error in createPointHistory: {}", e.getMessage(), e);
+            GrpcErrorHandler.handleGrpcError(responseObserver, Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException());
+        }
+    }
 }
