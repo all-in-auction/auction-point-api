@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Profile;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.UUID;
 
 @Configuration
 @Slf4j
@@ -25,6 +24,7 @@ public class EcsConfig {
             ip = InetAddress.getLocalHost().getHostAddress();
             log.info("ECS Task Container Private Ip address is {}", ip);
         } catch (UnknownHostException e) {
+            log.info("ECS Task Container Private Ip address can not found");
             e.printStackTrace();
         }
 
