@@ -12,19 +12,15 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import static com.auction.point.api.common.constants.Const.USER_ID;
 
-@FeignClient(
-        name = "coupon-service",
-        url = "${spring.cloud.openfeign.url}",
-        configuration = FeignConfig.class
-)
+@FeignClient(name = "auction-service")
 public interface CouponService {
-    @GetMapping("/v4/coupons/{couponUserId}")
+    @GetMapping("/api/internal/v4/coupons/{couponUserId}")
     ApiResponse<CouponGetResponseDto> getValidCoupon(
             @RequestHeader(USER_ID) long userId,
             @PathVariable("couponUserId") Long couponUserId
     );
 
-    @PostMapping("/v4/coupons/{couponUserId}")
+    @PostMapping("/api/internal/v4/coupons/{couponUserId}")
     ApiResponse<Void> useCoupon(
             @RequestHeader(USER_ID) long userId,
             @PathVariable("couponUserId") Long couponUserId,
