@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import static com.auction.point.api.common.constants.Const.USER_ID;
 
-@FeignClient(
-        name = "auction-service",
-        configuration = FeignConfig.class
-)
+@FeignClient(name = "auction-service")
 public interface CouponService {
     @GetMapping("/v4/coupons/{couponUserId}")
     ApiResponse<CouponGetResponseDto> getValidCoupon(
