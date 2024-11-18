@@ -30,7 +30,6 @@ public class PointController {
     private String CLIENT_KEY;
     private final PaymentService paymentService;
     private final PointService pointService;
-
     private final CouponService couponService;
 
     /**

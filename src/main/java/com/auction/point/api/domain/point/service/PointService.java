@@ -87,8 +87,6 @@ public class PointService {
             throw new ApiException(ErrorStatus._INVALID_CONVERT_REQUEST);
         }
 
-        // 계좌 정보로 이체하는 로직 있는 자리
-
         // point history 생성 및 저장
         pointHistoryService.createPointHistory(userId, convertRequestDto.getAmount(), PaymentType.TRANSFER);
 
@@ -135,7 +133,6 @@ public class PointService {
         // point history 생성 및 저장
         pointHistoryService.createPointHistory(userId, amount, paymentType);
     }
-
 
     private JSONObject sendRequest(JSONObject requestData, String secretKey, String urlString) throws IOException {
         HttpURLConnection connection = createConnection(secretKey, urlString);

@@ -1,6 +1,5 @@
 package com.auction.point.grpc.config;
 
-
 import com.auction.point.grpc.PointGrpcService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
@@ -19,7 +18,7 @@ public class GrpcServerConfig {
                 .build()
                 .start();
 
-        System.out.println("gRPC Server started on port 8081");
+        System.out.println("gRPC Server started on port 8085");
         return server;
     }
 }

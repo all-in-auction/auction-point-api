@@ -1,5 +1,6 @@
 package com.auction.point.api.domain.payment.entity;
 
+import com.auction.point.api.common.entity.TimeStamped;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "payment")
-public class Payment {
+public class Payment extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

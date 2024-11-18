@@ -27,13 +27,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
-//    @ExceptionHandler(AuthenticationException.class)
-//    public ResponseEntity<ApiResponse<String>> handleAuthenticationException(AuthenticationException e) {
-//        return ResponseEntity.status(ErrorStatus._NOT_AUTHENTICATIONPRINCIPAL_USER.getHttpStatus())
-//                .body(ApiResponse.fail(ErrorStatus._NOT_AUTHENTICATIONPRINCIPAL_USER));
-//    }
-
-
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ApiResponse<String>> handleCustomException(ApiException e) {
         BaseCode errorCode = e.getErrorCode();
