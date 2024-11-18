@@ -1,5 +1,7 @@
 package com.auction.point.grpc;
 
+import com.auction.Point;
+import com.auction.PointServiceGrpc;
 import com.auction.point.api.domain.point.repository.PointRepository;
 import com.auction.point.api.domain.point.service.PointService;
 import com.auction.point.api.domain.pointHistory.enums.PaymentType;
@@ -10,8 +12,8 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import point.Point;
-import point.PointServiceGrpc;
+
+
 
 @Slf4j
 @Service
