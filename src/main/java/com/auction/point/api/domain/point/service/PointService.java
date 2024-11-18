@@ -69,7 +69,7 @@ public class PointService {
         return new ChargeResponseDto(payment.getPaymentAmount(), payment.getPointAmount(), point.getPointAmount());
     }
 
-//    @Transactional
+    @Transactional
     public void createPoint(long userId) {
         Point point = new Point(0, userId);
         try {
