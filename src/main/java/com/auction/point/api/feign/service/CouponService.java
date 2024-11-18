@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import static com.auction.point.api.common.constants.Const.USER_ID;
 
 @FeignClient(
-        name = "coupon-service",
-        url = "${spring.cloud.openfeign.url}",
+        name = "auction-service",
         configuration = FeignConfig.class
 )
 public interface CouponService {
