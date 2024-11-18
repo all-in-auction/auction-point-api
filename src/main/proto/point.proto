@@ -3,7 +3,7 @@ syntax = "proto3";
 package point;
 
 // 해당 proto 파일로 컴파일된 자바 파일이 위치할 곳
-//option java_package = "com.auction";
+option java_package = "com.auction";
 
 service PointService {
 
