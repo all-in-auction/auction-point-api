@@ -2,6 +2,7 @@ package com.auction.point.grpc;
 
 import com.auction.Point;
 import com.auction.PointServiceGrpc;
+import com.auction.point.api.common.exception.ApiException;
 import com.auction.point.api.domain.point.repository.PointRepository;
 import com.auction.point.api.domain.point.service.PointService;
 import com.auction.point.api.domain.pointHistory.enums.PaymentType;
@@ -34,9 +35,14 @@ public class PointGrpcService extends PointServiceGrpc.PointServiceImplBase {
                     .build();
             responseObserver.onNext(response);
             responseObserver.onCompleted();
+        } catch (ApiException e) {
+            GrpcErrorHandler.handleGrpcError(responseObserver,
+                    Status.INVALID_ARGUMENT.withDescription(
+                            e.getErrorCode().getReasonHttpStatus().getMessage()).asRuntimeException());
         } catch (Exception e) {
-            log.error("Error in getPoints: {}", e.getMessage(), e);
-            GrpcErrorHandler.handleGrpcError(responseObserver, Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException());
+            log.error("Unexpected exception in getPoints: {}", e.getMessage(), e);
+            GrpcErrorHandler.handleGrpcError(responseObserver,
+                    Status.INTERNAL.withDescription("Unexpected error").asRuntimeException());
         }
     }
 
