@@ -91,7 +91,7 @@ public class PointService {
         pointHistoryService.createPointHistory(userId, convertRequestDto.getAmount(), PaymentType.TRANSFER);
 
         // point 보유량 변화
-        point.addPoint(convertRequestDto.getAmount());
+        point.minusPoint(convertRequestDto.getAmount());
 
         return new ConvertResponseDto(convertRequestDto.getAmount(), point.getPointAmount());
     }
