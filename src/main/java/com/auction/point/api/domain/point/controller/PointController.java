@@ -9,6 +9,14 @@ import com.auction.point.api.domain.point.dto.response.ConvertResponseDto;
 import com.auction.point.api.domain.point.service.PointService;
 import com.auction.point.api.feign.dto.response.CouponGetResponseDto;
 import com.auction.point.api.feign.service.CouponService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +33,7 @@ import static com.auction.point.api.common.constants.Const.USER_ID;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api")
+@Tag(name = "PointController")
 public class PointController {
     @Value("${payment.client.key}")
     private String CLIENT_KEY;
@@ -39,6 +48,11 @@ public class PointController {
      */
     @PostMapping("/internal/v4/points")
     @ResponseBody
+    @Operation(summary = "유저 포인트 생성", description = "회원가입 시, 유저 포인트를 생성하는 API", hidden = true)
+    @Parameters({
+            @Parameter(name = USER_ID, description = "유저 ID", example = "100000")
+    })
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json"))
     public ApiResponse<Void> createPoint(@RequestHeader(USER_ID) long userId) {
         pointService.createPoint(userId);
         return ApiResponse.ok(null);
@@ -52,6 +66,18 @@ public class PointController {
      */
     @PatchMapping("/internal/v4/points")
     @ResponseBody
+    @Operation(summary = "유저 포인트 변경", description = "포인트 사용, 환불 등으로 인한 포인트 변경 API", hidden = true)
+    @Parameters({
+            @Parameter(name = USER_ID, description = "유저 ID", example = "1")
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(
+                    examples = {
+                            @ExampleObject(value = "{\"amount\": 1000, \"paymentType\": \"SPEND\"}")
+                    }
+            )
+    )
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json"))
     public ApiResponse<Void> changePoint(
             @RequestHeader(USER_ID) long userId,
             @RequestBody PointChangeRequestDto pointChangeRequestDto
@@ -70,6 +96,16 @@ public class PointController {
      * @return front page
      */
     @GetMapping("/v2/points/buy")
+    @Operation(summary = "유저 포인트 충전", description = "토스 페이를 이용한 포인트 충전 API")
+    @Parameters({
+            @Parameter(name = USER_ID, description = "유저 ID", example = "1"),
+            @Parameter(name = "amount", description = "충전할 포인트양", example = "10000"),
+            @Parameter(name = "couponUserId", description = "유저 ID"),
+    })
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "html")),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "결제 금액은 1000원 단위입니다.", content = @Content(mediaType = "application/json"))
+    })
     public String getPaymentPage(@RequestHeader(USER_ID) long userId,
                                  @RequestParam int amount,
                                  @RequestParam(required = false) Long couponUserId,
@@ -107,6 +143,8 @@ public class PointController {
      */
     @PostMapping("/v1/points/buy/confirm")
     @ResponseBody
+    @Operation(summary = "결제 승인", description = "포인트 충전 후, 프론트에서 호출하는 결제 승인 API", hidden = true)
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json"))
     public ApiResponse<ChargeResponseDto> confirmPayment(@RequestBody String jsonBody) throws IOException {
         ChargeResponseDto chargeResponseDto = pointService.confirmPayment(jsonBody);
 
@@ -122,8 +160,24 @@ public class PointController {
      */
     @PostMapping("/v1/points/to-cash")
     @ResponseBody
+    @Operation(summary = "현금 전환", description = "포인트를 현금으로 전환하는 API")
+    @Parameters({
+            @Parameter(name = USER_ID, description = "유저 ID", example = "1")
+    })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(
+                    examples = {
+                            @ExampleObject(value = "{\"amount\": 1000, \"bankCode\": \"신한\", \"bankAccount\": \"111-111-111111\"}")
+                    }
+            )
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "application/json")),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "권한이 없습니다.", content = @Content(mediaType = "application/json")),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "현재 포인트 잔고보다 더 큰 값을 전환 요청할 수 없습니다.", content = @Content(mediaType = "application/json"))
+    })
     public ApiResponse<ConvertResponseDto> convertPoint(@RequestHeader(USER_ID) long userId,
-                                                        @RequestBody ConvertRequestDto convertRequestDto) {
+                                                        @Valid @RequestBody ConvertRequestDto convertRequestDto) {
         return ApiResponse.ok(pointService.convertPoint(userId, convertRequestDto));
     }
 }

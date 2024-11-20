@@ -20,7 +20,7 @@ public class Point extends TimeStamped {
     private int pointAmount;
 
     @NotNull
-    @Column(name = "user_id")
+    @Column(name = "user_id", unique = true)
     private long userId;
 
     public void addPoint(int amount) {

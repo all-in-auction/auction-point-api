@@ -1,6 +1,5 @@
 package com.auction.point.api.feign.dto.request;
 
-import com.auction.point.api.domain.payment.entity.Payment;
 import com.auction.point.api.domain.pointHistory.entity.PointHistory;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
