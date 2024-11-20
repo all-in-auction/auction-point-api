@@ -31,7 +31,3 @@ server:
   error:
     include-message: always
   port: 8080
-
-springdoc:
-  api-docs:
-    path: /api/v1/points/v3/api-docs
