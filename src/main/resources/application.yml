@@ -40,5 +40,9 @@ management:
 
 springdoc:
   api-docs:
+    version: openapi_3_1
     enabled: true
+    path: /v3/api-docs # API 문서의 경로를 설정합니다.
+  swagger-ui:
+    path: /index.html
   enable-spring-security: true
