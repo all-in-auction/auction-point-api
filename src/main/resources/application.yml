@@ -9,9 +9,20 @@ spring:
   jpa:
     open-in-view: false
 
-server:
-#  port: 8081
-  port: 0   # 랜덤 포트
+  cloud:
+    openfeign:
+      okhttp:
+        enabled: true
+
+logging:
+  level:
+    ROOT: INFO
+    org.hibernate: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.orm: TRACE
+    org.springframework.transaction: TRACE
+    com.zaxxer.hikari: TRACE
+    com.mysql.cj.jdbc: TRACE
 
 eureka:
   client:
@@ -19,8 +30,19 @@ eureka:
       defaultZone: http://${EUREKA_HOST}:8761/eureka
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: "prometheus,health"
   endpoint:
     health:
       show-details: always
-  security:
-    enabled: false
+
+springdoc:
+  api-docs:
+    version: openapi_3_1
+    enabled: true
+    path: /v3/api-docs # API 문서의 경로를 설정합니다.
+  swagger-ui:
+    path: /index.html
+  enable-spring-security: true

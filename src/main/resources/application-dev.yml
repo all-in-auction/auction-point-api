@@ -21,6 +21,10 @@ spring:
         format_sql: true
         use_sql_comments: true
 
+  cloud:
+    openfeign:
+      url: localhost:8080/api/internal
+
 payment:
   client:
     key: ${PAYMENT_CLIENT_KEY}
@@ -30,3 +34,4 @@ payment:
 server:
   error:
     include-message: always
+  port: 8081
