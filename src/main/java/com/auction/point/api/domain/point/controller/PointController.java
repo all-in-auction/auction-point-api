@@ -98,7 +98,6 @@ public class PointController {
     @GetMapping("/v2/points/buy")
     @Operation(summary = "유저 포인트 충전", description = "토스 페이를 이용한 포인트 충전 API")
     @Parameters({
-            @Parameter(name = USER_ID, description = "유저 ID", example = "1"),
             @Parameter(name = "amount", description = "충전할 포인트양", example = "10000"),
             @Parameter(name = "couponUserId", description = "유저 ID"),
     })
@@ -106,7 +105,7 @@ public class PointController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = @Content(mediaType = "html")),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "결제 금액은 1000원 단위입니다.", content = @Content(mediaType = "application/json"))
     })
-    public String getPaymentPage(@RequestHeader(USER_ID) long userId,
+    public String getPaymentPage(@Parameter(hidden = true) @RequestHeader(USER_ID) long userId,
                                  @RequestParam int amount,
                                  @RequestParam(required = false) Long couponUserId,
                                  Model model) {
@@ -161,9 +160,6 @@ public class PointController {
     @PostMapping("/v1/points/to-cash")
     @ResponseBody
     @Operation(summary = "현금 전환", description = "포인트를 현금으로 전환하는 API")
-    @Parameters({
-            @Parameter(name = USER_ID, description = "유저 ID", example = "1")
-    })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @Content(
                     examples = {
@@ -176,7 +172,7 @@ public class PointController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "권한이 없습니다.", content = @Content(mediaType = "application/json")),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "현재 포인트 잔고보다 더 큰 값을 전환 요청할 수 없습니다.", content = @Content(mediaType = "application/json"))
     })
-    public ApiResponse<ConvertResponseDto> convertPoint(@RequestHeader(USER_ID) long userId,
+    public ApiResponse<ConvertResponseDto> convertPoint(@Parameter(hidden = true) @RequestHeader(USER_ID) long userId,
                                                         @Valid @RequestBody ConvertRequestDto convertRequestDto) {
         return ApiResponse.ok(pointService.convertPoint(userId, convertRequestDto));
     }
