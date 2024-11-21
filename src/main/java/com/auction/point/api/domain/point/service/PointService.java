@@ -6,6 +6,7 @@ import com.auction.point.api.domain.payment.dto.response.ChargeResponseDto;
 import com.auction.point.api.domain.payment.entity.Payment;
 import com.auction.point.api.domain.payment.service.PaymentService;
 import com.auction.point.api.domain.point.dto.request.ConvertRequestDto;
+import com.auction.point.api.domain.point.dto.request.PointChangeRequestDto;
 import com.auction.point.api.domain.point.dto.response.ConvertResponseDto;
 import com.auction.point.api.domain.point.entity.Point;
 import com.auction.point.api.domain.point.repository.PointRepository;
@@ -57,21 +58,25 @@ public class PointService {
         // point history 생성 및 저장
         PointHistory pointHistory = pointHistoryService.createPointHistory(userId, payment.getPointAmount(), PaymentType.CHARGE);
 
-        // coupon 사용 저장
-        if(payment.getCouponUserId() != null) {
-            couponService.useCoupon(userId, CouponUseRequestDto.from(payment, pointHistory));
-        }
-
         // point 보유량 변화
         point.addPoint(payment.getPointAmount());
+
+        // coupon 사용 저장
+        if (payment.getCouponUserId() != null) {
+            couponService.useCoupon(userId, payment.getCouponUserId(), CouponUseRequestDto.from(pointHistory));
+        }
 
         return new ChargeResponseDto(payment.getPaymentAmount(), payment.getPointAmount(), point.getPointAmount());
     }
 
     @Transactional
     public void createPoint(long userId) {
-        Point point = Point.of(0, userId);
-        pointRepository.save(point);
+        Point point = new Point(0, userId);
+        try {
+            pointRepository.save(point);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional
@@ -82,13 +87,11 @@ public class PointService {
             throw new ApiException(ErrorStatus._INVALID_CONVERT_REQUEST);
         }
 
-        // 계좌 정보로 이체하는 로직 있는 자리
-
         // point history 생성 및 저장
         pointHistoryService.createPointHistory(userId, convertRequestDto.getAmount(), PaymentType.TRANSFER);
 
         // point 보유량 변화
-        point.addPoint(convertRequestDto.getAmount());
+        point.minusPoint(convertRequestDto.getAmount());
 
         return new ConvertResponseDto(convertRequestDto.getAmount(), point.getPointAmount());
     }
@@ -112,6 +115,23 @@ public class PointService {
         int newPointAmount = point.getPointAmount() + price;
         point.changePoint(newPointAmount);
         pointRepository.save(point);
+    }
+
+    @Transactional
+    public void changePoint(long userId, PointChangeRequestDto pointChangeRequestDto) {
+        int amount = pointChangeRequestDto.getAmount();
+        PaymentType paymentType = pointChangeRequestDto.getPaymentType();
+
+        if (PaymentType.isDecreasePoint(paymentType)) {
+            // 포인트 차감
+            decreasePoint(userId, amount);
+        } else {
+            // 포인트 증감
+            increasePoint(userId, amount);
+        }
+
+        // point history 생성 및 저장
+        pointHistoryService.createPointHistory(userId, amount, paymentType);
     }
 
     private JSONObject sendRequest(JSONObject requestData, String secretKey, String urlString) throws IOException {

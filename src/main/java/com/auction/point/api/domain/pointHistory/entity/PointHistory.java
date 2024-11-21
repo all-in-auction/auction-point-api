@@ -17,13 +17,16 @@ public class PointHistory extends TimeStamped {
     private Long id;
 
     @NotNull
+    @Column(name = "user_id")
     private long userId;
 
     @NotNull
+    @Column(name = "price")
     private int price;
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "payment_type")
     private PaymentType paymentType;
 
     private PointHistory(long userId, int price, PaymentType paymentType) {
