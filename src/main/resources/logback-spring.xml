@@ -6,7 +6,7 @@
     <timestamp key="DATETIME" datePattern="yyyy-MM-dd"/>
 
     <!-- LOGSTASH -->
-    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashAccessTcpSocketAppender">
+    <!--<appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashAccessTcpSocketAppender">
         <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
         <layout class="net.logstash.logback.layout.LogstashLayout">
@@ -14,7 +14,7 @@
         </layout>
     </appender>
 
-    <!-- FLUENTD -->
+    &lt;!&ndash; FLUENTD &ndash;&gt;
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
@@ -55,7 +55,7 @@
                 <maxFileSize>50MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
-    </appender>
+    </appender>-->
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>

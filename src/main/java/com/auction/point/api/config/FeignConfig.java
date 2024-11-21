@@ -36,9 +36,4 @@ public class FeignConfig {
     public Retryer retryer() {
         return new Retryer.Default(500L, TimeUnit.SECONDS.toMillis(5), 2);
     }
-
-    @Bean
-    public Client feignClient() {
-        return new OkHttpClient();
-    }
 }
