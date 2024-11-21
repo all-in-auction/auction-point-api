@@ -31,9 +31,3 @@ server:
   error:
     include-message: always
   port: 8080
-
-springdoc:
-  api-docs:
-    path: /points/v3/api-docs
-  swagger-ui:
-    path: /points/swagger-ui.html
