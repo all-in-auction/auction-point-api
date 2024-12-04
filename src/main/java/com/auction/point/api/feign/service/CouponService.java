@@ -1,7 +1,6 @@
 package com.auction.point.api.feign.service;
 
 import com.auction.point.api.common.apipayload.ApiResponse;
-import com.auction.point.api.config.FeignConfig;
 import com.auction.point.api.feign.dto.request.CouponUseRequestDto;
 import com.auction.point.api.feign.dto.response.CouponGetResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import static com.auction.point.api.common.constants.Const.USER_ID;
 
-@FeignClient(name = "auction-service")
+@FeignClient(
+        name = "${feign.server.coupon}"
+)
 public interface CouponService {
     @GetMapping("/api/internal/v4/coupons/{couponUserId}")
     ApiResponse<CouponGetResponseDto> getValidCoupon(
