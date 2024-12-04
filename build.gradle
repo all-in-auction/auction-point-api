@@ -41,6 +41,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'com.googlecode.json-simple:json-simple:1.1'
     compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -63,6 +64,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.github.openfeign:feign-okhttp:13.5'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
 
 	// actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
